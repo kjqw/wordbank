@@ -9,6 +9,7 @@ Wordbankからデータを取得する方法の例を以下に示します。
 3. **Form** で「WG」を選択
 4. 「Get Data!」ボタンをクリック
 5. 表示されたページで「Download data」をクリックし、データをダウンロード
+6. `data/`にダウンロードした`wordbank_instrument_data.csv`を配置
 
 ## コマンドラインを使用したダウンロード方法
 
