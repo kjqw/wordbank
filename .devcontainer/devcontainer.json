@@ -1,0 +1,37 @@
+{
+    "name": "wordbank",
+    "image": "pytorch:cuda",
+    "runArgs": [
+        "--gpus",
+        "all",
+        "--name",
+        "wordbank"
+    ],
+    "mounts": [
+        "source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind",
+        "source=${localEnv:HOME}/.gitconfig,target=/root/.gitconfig,type=bind"
+    ],
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "python.defaultInterpreterPath": "/opt/conda/envs/pytorch/bin/python",
+                "[python]": {
+                    "editor.defaultFormatter": "ms-python.black-formatter",
+                    "editor.formatOnSave": true,
+                    "editor.formatOnType": false,
+                    "editor.formatOnPaste": false
+                },
+                "editor.fontFamily": "HackGen, Consolas, 'Courier New', monospace"
+            },
+            "extensions": [
+                "ms-python.python",
+                "ms-python.black-formatter",
+                "ms-azuretools.vscode-docker",
+                "ms-toolsai.jupyter",
+                "mechatroner.rainbow-csv",
+                "mhutchie.git-graph",
+                "eamodio.gitlens"
+            ]
+        }
+    }
+}
