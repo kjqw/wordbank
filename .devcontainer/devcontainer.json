@@ -30,7 +30,8 @@
                 "ms-toolsai.jupyter",
                 "mechatroner.rainbow-csv",
                 "mhutchie.git-graph",
-                "eamodio.gitlens"
+                "eamodio.gitlens",
+                "github.copilot"
             ]
         }
     }
