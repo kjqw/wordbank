@@ -21,11 +21,13 @@
                     "editor.formatOnType": false,
                     "editor.formatOnPaste": false
                 },
+                "isort.args": ["--profile", "black"],
                 "editor.fontFamily": "HackGen, Consolas, 'Courier New', monospace"
             },
             "extensions": [
                 "ms-python.python",
                 "ms-python.black-formatter",
+                "ms-python.isort",
                 "ms-azuretools.vscode-docker",
                 "ms-toolsai.jupyter",
                 "mechatroner.rainbow-csv",
