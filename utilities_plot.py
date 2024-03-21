@@ -73,9 +73,9 @@ def set_labels(ax: Axes, title: str = "") -> None:
     ax.set_title(title)
 
 
-def plot_x(model: VAE, xs: np.ndarray, ax: Axes) -> None:
+def plot_x(model: VAE, xs: np.ndarray, ax: Axes, color: str = "tab:blue") -> None:
     zs = x_to_z(model, xs)
-    ax.scatter(zs[:, 0], zs[:, 1], s=0.2)
+    ax.scatter(zs[:, 0], zs[:, 1], s=0.2, color=color)
 
     plot_origin(model, ax)
 
@@ -135,7 +135,7 @@ def plot_vocabulary(
     zs = np.dstack((z1, z2))
     xs = z_to_x(model, zs)
     vocabulary = get_vocabulary(xs, categories)
-    cmap = ax.pcolormesh(z1, z2, vocabulary, cmap="Greys_r")
+    cmap = ax.pcolormesh(z1, z2, vocabulary, cmap="turbo")
     cbar = fig.colorbar(cmap, ax=ax)
     cbar.set_label("vocabulary")
     set_labels(ax, ", ".join(categories))
