@@ -151,3 +151,8 @@ def plot_arrow(model: VAE, data_ids: list[int], ax: Axes) -> None:
             xytext=z1,
             arrowprops=dict(arrowstyle="->", color="black"),
         )
+
+
+def child_id_to_data(child_ids: list[int]) -> list[int]:
+    data_ids = [[i[0] for i in child_id_dict[j]] for j in child_ids]
+    return data_ids
