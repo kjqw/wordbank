@@ -126,7 +126,7 @@ def make_lattice_points(
 
 def plot_vocabulary(
     model: VAE,
-    z_mashgrid,
+    z_mashgrid: list[np.ndarray, np.ndarray],
     fig: Figure,
     ax: Axes,
     categories: list[str] = ["all"],
