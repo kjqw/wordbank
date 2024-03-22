@@ -1,4 +1,5 @@
-import numpy as np
+import pickle
+
 import torch
 from torch import nn
 
@@ -51,3 +52,25 @@ def train(model, data_loader, optimizer):
         optimizer.step()
     average_loss = train_loss / len(data_loader.dataset)
     print(f"Average loss: {average_loss:.4f}")
+
+
+def load_data(data_names: list[str]) -> list:
+    data = []
+    for i in data_names:
+        match i:
+            case "data":
+                with open("tmp/data.pkl", "rb") as f:
+                    data.append(pickle.load(f))
+            case "data_id_dict":
+                with open("tmp/data_id_dict.pkl", "rb") as f:
+                    data.append(pickle.load(f))
+            case "child_id_dict":
+                with open("tmp/child_id_dict.pkl", "rb") as f:
+                    data.append(pickle.load(f))
+            case "word_dict":
+                with open("tmp/word_dict.pkl", "rb") as f:
+                    data.append(pickle.load(f))
+            case "category_dict":
+                with open("tmp/category_dict.pkl", "rb") as f:
+                    data.append(pickle.load(f))
+    return data
