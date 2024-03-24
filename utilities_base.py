@@ -5,7 +5,7 @@ from torch import nn, optim
 from torch.utils.data import DataLoader
 
 # GPUが利用可能な場合はGPUを使用し、そうでない場合はCPUを使用
-device: str = "cuda" if torch.cuda.is_available() else "cpu"
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 class VAE(nn.Module):
@@ -153,7 +153,7 @@ def train(
         train_loss += loss.item()
         optimizer.step()
     average_loss = train_loss / len(data_loader.dataset)
-    print(f"Average loss: {average_loss:.4f}")
+    return average_loss
 
 
 def load_data(data_names: list[str]) -> list:
