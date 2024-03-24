@@ -8,6 +8,7 @@ import torch
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from PIL import Image
+from scipy.interpolate import splev, splprep
 
 import utilities_plot as up
 from utilities_base import VAE, load_data
@@ -41,6 +42,18 @@ def get_symmetric_points(P1: np.ndarray, P2: np.ndarray, Q: np.ndarray) -> np.nd
     symmetric_point = Q + symmetric_vector * 2
 
     return symmetric_point
+
+
+def spline_interpolation(xy, n=100):
+    x, y = zip(*xy)
+    if xy[0] == xy[-1]:
+        tck, u = splprep([x, y], s=0, per=True)
+    else:
+        tck, u = splprep([x, y], s=0)
+    unew = np.linspace(0, 1, n)
+    out = splev(unew, tck)
+    out = np.array(out).T
+    return out
 
 
 def get_expectation_from_zs_with_category(
@@ -85,14 +98,14 @@ def plot_expectation_with_category(
 
 
 def save_expectation_plot_with_category(
-    model: VAE, zs: np.ndarray, output_path: Path
+    model: VAE, zs: np.ndarray, output_path: Path, filename: str = "expectation"
 ) -> None:
     category_vocabulary = get_expectation_from_zs_with_category(model, zs)
     image_num = category_vocabulary["sounds"].shape[0]
     figs = set_config_expectation_plot(image_num)
     plot_expectation_with_category(category_vocabulary, figs)
     for i in range(image_num):
-        figs[f"expectation_{i}"][0].savefig(output_path / f"expectation_{i}.png")
+        figs[f"expectation_{i}"][0].savefig(output_path / f"{filename}_{i}.png")
 
 
 def get_expectation_diff_from_zs_with_category(
@@ -103,7 +116,7 @@ def get_expectation_diff_from_zs_with_category(
     category_vocabulary_diff = {}
     for key in category_vocabulary1.keys():
         category_vocabulary_diff[key] = (
-            category_vocabulary2[key] - category_vocabulary1[key]
+            category_vocabulary1[key] - category_vocabulary2[key]
         )
 
     return category_vocabulary_diff
@@ -144,26 +157,28 @@ def save_expectation_diff_plot_with_category(
     point1: str,
     point2: str,
     output_path: Path,
+    filename: str = "expectation_diff",
 ) -> None:
     category_vocabulary = get_expectation_diff_from_zs_with_category(model, zs1, zs2)
     image_num = category_vocabulary["sounds"].shape[0]
     figs = set_config_expectation_diff_plot(image_num, point1, point2)
     plot_expectation_diff_with_category(category_vocabulary, figs)
     for i in range(image_num):
-        figs[f"expectation_diff_{i}"][0].savefig(
-            output_path / f"expectation_diff_{i}.png"
-        )
+        figs[f"expectation_diff_{i}"][0].savefig(output_path / f"{filename}_{i}.png")
 
 
-def save_zs_plot(model: VAE, zs: np.ndarray, output_path: Path) -> None:
+def save_zs_plot(
+    model: VAE, zs: np.ndarray, output_path: Path, filename: str = "point"
+) -> None:
     data = load_data(["data"])[0]
     figs = {}
     figs["points"] = plt.subplots()
     up.plot_x(model, data, figs["points"][1])
+    figs["points"][1].plot(zs[:, 0], zs[:, 1], color="tab:orange", linestyle="--")
     for i, v in enumerate(zs):
         sc = figs["points"][1].scatter(v[0], v[1], color="tab:orange", label=f"point")
         figs["points"][1].legend()
-        figs["points"][0].savefig(output_path / f"point_{i}.png")
+        figs["points"][0].savefig(output_path / f"{filename}_{i}.png")
         sc.remove()
         plt.close()
 
@@ -175,6 +190,7 @@ def save_zs_diff_plot(
     point1: str,
     point2: str,
     output_path: Path,
+    filename: str = "point_diff",
 ) -> None:
     data = load_data(["data"])[0]
     figs = {}
@@ -188,7 +204,7 @@ def save_zs_diff_plot(
             *zs2[i], color="tab:green", label=point2, marker="+"
         )
         figs["points"][1].legend()
-        figs["points"][0].savefig(output_path / f"point_diff_{i}.png")
+        figs["points"][0].savefig(output_path / f"{filename}_{i}.png")
         sc1.remove()
         sc2.remove()
         plt.close()
