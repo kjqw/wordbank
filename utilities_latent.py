@@ -196,12 +196,14 @@ def save_zs_diff_plot(
     figs = {}
     figs["points"] = plt.subplots()
     up.plot_x(model, data, figs["points"][1])
+    figs["points"][1].plot(zs1[:, 0], zs1[:, 1], color="tab:orange", linestyle="--")
+    figs["points"][1].plot(zs2[:, 0], zs2[:, 1], color="tab:green", linestyle="--")
     for i in range(len(zs1)):
         sc1 = figs["points"][1].scatter(
             *zs1[i], color="tab:orange", label=point1, marker="o"
         )
         sc2 = figs["points"][1].scatter(
-            *zs2[i], color="tab:green", label=point2, marker="+"
+            *zs2[i], color="tab:green", label=point2, marker="o"
         )
         figs["points"][1].legend()
         figs["points"][0].savefig(output_path / f"{filename}_{i}.png")
