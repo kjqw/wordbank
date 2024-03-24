@@ -1,8 +1,4 @@
-import pickle
-
-import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 import torch
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
@@ -21,9 +17,10 @@ def child_id_to_data(child_id: int) -> list[int]:
 
 # 単語データを潜在変数に変換
 def x_to_z(model: VAE, xs: np.ndarray) -> np.ndarray:
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.eval()
     with torch.no_grad():
-        xs = torch.tensor(xs.astype(np.float32)).cuda()
+        xs = torch.tensor(xs.astype(np.float32)).to(device)
         zs = model.encoder(xs)
         mu, log_var = zs.chunk(2, dim=1)
         z_points = mu.cpu()
@@ -33,9 +30,10 @@ def x_to_z(model: VAE, xs: np.ndarray) -> np.ndarray:
 
 # 潜在変数を単語データに変換
 def z_to_x(model: VAE, z: np.ndarray) -> np.ndarray:
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.eval()
     with torch.no_grad():
-        z = torch.tensor(z.astype(np.float32)).cuda()
+        z = torch.tensor(z.astype(np.float32)).to(device)
         xs = model.decoder(z)
         xs = np.array(xs.cpu())
         return xs
