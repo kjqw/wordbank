@@ -1,12 +1,17 @@
 {
     "name": "wordbank",
     "image": "pytorch:cuda",
+    // gpuの有無によって"runArgs"のどちらかを選択
     "runArgs": [
         "--gpus",
         "all",
         "--name",
         "wordbank"
     ],
+    // "runArgs": ["--name", "wordbank"],
+    // `--gpus all`を消したのにコンテナのbuild時にエラーが出る場合は、手動で既にあるコンテナを削除してコマンドパレットから`Dev Containers: Rebuild Container`するとうまくいった
+    // 具体的には、コマンドラインで`docker ps -a`などを実行して、`--gpus all`がある状態でビルドされたコンテナを探してそれを消した
+    // devcontainerがもともとあるコンテナを探しに行くのがエラーの原因か?
     "mounts": [
         "source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind",
         "source=${localEnv:HOME}/.gitconfig,target=/root/.gitconfig,type=bind"
@@ -22,7 +27,8 @@
                     "editor.formatOnPaste": false
                 },
                 "isort.args": ["--profile", "black"],
-                "editor.fontFamily": "HackGen, Consolas, 'Courier New', monospace"
+                "editor.fontFamily": "HackGen, Consolas, 'Courier New', monospace",
+                "editor.wordWrap": "on"
             },
             "extensions": [
                 "ms-python.python",
